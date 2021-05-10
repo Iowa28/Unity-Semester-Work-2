@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 046f963f4ff1453e8fe9cbfd902a611d, type: 3}
+  m_Name: Try Take Cover Selector
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 11400000, guid: e48ece7c760fe4e45a0f7a5c75e5b0f7, type: 2}
+  - {fileID: 11400000, guid: 7243c0fa7f3272d42b05fe4ff237c00b, type: 2}
