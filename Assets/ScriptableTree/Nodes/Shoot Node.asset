@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 865f07cce3de4312a05c0dfc71ae4765, type: 3}
   m_Name: Shoot Node
   m_EditorClassIdentifier: 
-  smoothDamp: 0.25
+  smoothTime: 0.5
   checkRange: 100

@@ -5,23 +5,21 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
     [CreateAssetMenu(menuName = "ScriptableTree/Nodes/IsCoverAvailable")]
     public class IsCoverAvailable : Node
     {
-        private Cover[] availableCovers;
-        private Transform target; //player
-        private EnemyAIController ai;
-        [SerializeField] private float minAngle;
+        [SerializeField] 
+        private float minAngle;
+        private Transform target;
         
-        public override NodeState Evaluate(EnemyAIController aiController)
+        public override NodeState Evaluate(EnemyAIController ai)
         {
-            availableCovers = aiController.availableCovers;
-            target = aiController.playerTransform;
-            ai = aiController;
+            Cover[] availableCovers = ai.GetAvailableCovers();
+            target = ai.GetPlayerTransform();
             
-            Transform bestSpot = FindBestCoverSpot();
+            Transform bestSpot = FindBestCoverSpot(ai, availableCovers);
             ai.SetBestCoverSpot(bestSpot);
             return bestSpot != null ? NodeState.SUCCESS : NodeState.FAILURE;
         }
         
-        private Transform FindBestCoverSpot()
+        private Transform FindBestCoverSpot(EnemyAIController ai, Cover[] covers)
         {
             if (ai.GetBestCoverSpot() != null)
             {
@@ -33,15 +31,14 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
             
             Transform bestSpot = null;
             float bestDistance = 0;
-            
-            for (int i = 0; i < availableCovers.Length; i++)
+
+            foreach (Cover cover in covers)
             {
-                Transform bestSpotInCover = FindBestSpotInCover(availableCovers[i], ref minAngle);
+                Transform bestSpotInCover = FindBestSpotInCover(cover, ref minAngle);
                 
                 if (bestSpotInCover != null)
                 {
                     float distance = Vector3.Distance(ai.transform.position, bestSpotInCover.position);
-
                     if (distance < bestDistance || bestDistance == 0)
                     {
                         //Debug.Log( "best distance: " + distance + " , cover index: " + i);
@@ -50,7 +47,6 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
                     }
                 }
             }
-
             return bestSpot;
         }
         
@@ -58,21 +54,20 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
         {
             Transform[] availableSpots = cover.GetCoverSpots();
             Transform bestSpot = null;
-            for (int i = 0; i < availableSpots.Length; i++)
+            foreach (Transform spot in availableSpots)
             {
-                Vector3 direction = target.position - availableSpots[i].position;
+                Vector3 direction = target.position - spot.position;
             
-                if (CheckIfSpotIsValid(availableSpots[i]))
+                if (CheckIfSpotIsValid(spot))
                 {
-                    float angle = Vector3.Angle(availableSpots[i].forward, direction);
+                    float angle = Vector3.Angle(spot.forward, direction);
                     if (angle < minAngle)
                     {
                         minAngle = angle;
-                        bestSpot = availableSpots[i];
+                        bestSpot = spot;
                     }
                 }
             }
-
             return bestSpot;
         }
         
@@ -87,7 +82,6 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
                     return true;
                 }
             }
-
             return false;
         }
     }

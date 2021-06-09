@@ -6,27 +6,35 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
     [CreateAssetMenu(menuName = "ScriptableTree/Nodes/PatrolNode")]
     public class PatrolNode : Node
     {
-        private NavMeshAgent agent;
-        private EnemyAIController ai;
-        private Transform[] patrolSpots;
-
-        private int currentSpot = 0;
+        //TODO: current spot doesn't change for each bot
+        private int currentSpot;
         
-        public override NodeState Evaluate(EnemyAIController aiController)
+        public override NodeState Evaluate(EnemyAIController ai)
         {
-            agent = aiController.GetAgent();
-            ai = aiController;
-            patrolSpots = aiController.patrolSpots;
-            
-            ai.SetColor(Color.magenta);
-            //Debug.Log(Vector2.Distance(ai.transform.position, patrolSpots[currentSpot].position));
-            if (Vector2.Distance(ai.transform.position, patrolSpots[currentSpot].position) < 1f)
+            NavMeshAgent agent = ai.GetAgent();
+            Transform[] patrolSpots = ai.GetPatrolSpots();
+
+            if (ai.GetCurrentHealth() < ai.maxHealth)
             {
-                currentSpot = Random.Range(0, patrolSpots.Length);
-                Debug.Log(currentSpot);
+                return NodeState.FAILURE;
+            }
+            
+            //ai.SetColor(Color.magenta);
+            if (currentSpot < patrolSpots.Length && Vector2.Distance(ai.transform.position, patrolSpots[currentSpot].position) < 1f)
+            {
+                int newSpot = Random.Range(0, patrolSpots.Length);
+                currentSpot = newSpot;
+                
+                if (newSpot < patrolSpots.Length)
+                {
+                    
+                }
             }
 
-            agent.SetDestination(patrolSpots[currentSpot].position);
+            if (currentSpot < patrolSpots.Length)
+            {
+                agent.SetDestination(patrolSpots[currentSpot].position);   
+            }
 
             return NodeState.SUCCESS;
         }

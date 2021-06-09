@@ -4,15 +4,10 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
 {
     [CreateAssetMenu(menuName = "ScriptableTree/Nodes/HealthNode")]
     public class HealthNode : Node
-    { 
-        private EnemyAIController ai;
-        private float threshold;
-        
-        public override NodeState Evaluate(EnemyAIController aiController)
+    {
+        public override NodeState Evaluate(EnemyAIController ai)
         {
-            ai = aiController;
-            threshold = aiController.lowHealthThreshold;
-            
+            float threshold = ai.GetLowHealthThreshold();
             return ai.GetCurrentHealth() <= threshold ? NodeState.SUCCESS : NodeState.FAILURE;
         }
     }

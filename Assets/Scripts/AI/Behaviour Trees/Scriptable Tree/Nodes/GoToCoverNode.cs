@@ -6,19 +6,18 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
     [CreateAssetMenu(menuName = "ScriptableTree/Nodes/GoToCoverNode")]
     public class GoToCoverNode : Node
     {
-        private NavMeshAgent agent;
-        private EnemyAIController ai;
-
-        public override NodeState Evaluate(EnemyAIController aiController)
+        public override NodeState Evaluate(EnemyAIController ai)
         {
-            agent = aiController.GetAgent();
-            ai = aiController;
-            
+            NavMeshAgent agent = ai.GetAgent();
             Transform coverSpot = ai.GetBestCoverSpot();
+            
             if (coverSpot == null)
+            {
+                Debug.Log("I can't find any cover...");
                 return NodeState.FAILURE;
-        
-            ai.SetColor(Color.blue);
+            }
+
+            //ai.SetColor(Color.blue);
             float distance = Vector3.Distance(coverSpot.position, agent.transform.position);
             if(distance > 0.2f)
             {

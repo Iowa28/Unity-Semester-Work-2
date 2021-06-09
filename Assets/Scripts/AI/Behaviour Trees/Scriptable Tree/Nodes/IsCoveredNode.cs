@@ -5,17 +5,15 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
     [CreateAssetMenu(menuName = "ScriptableTree/Nodes/IsCoveredNode")]
     public class IsCoveredNode : Node
     {
-        private Transform target;
-        private Transform origin;
-        
-        public override NodeState Evaluate(EnemyAIController aiController)
+        public override NodeState Evaluate(EnemyAIController ai)
         {
-            target = aiController.playerTransform;
-            origin = aiController.transform;
+            Transform target = ai.GetPlayerTransform();
+            Transform origin = ai.transform;
             
             RaycastHit hit;
             if (Physics.Raycast(origin.position, target.position - origin.position, out hit))
             {
+                //Player doesn't see the bot
                 if (hit.collider.transform != target)
                 {
                     return NodeState.SUCCESS;

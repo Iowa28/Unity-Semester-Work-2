@@ -60,9 +60,9 @@ public class FPSController : MonoBehaviour
     {
         input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            gameObject.GetComponent<HealthController>().TakeDamage(30);
+            Debug.Log("Left game");
         }
     }
 

@@ -6,13 +6,11 @@ namespace AI.Behaviour_Trees.Scriptable_Tree.Nodes
     public class RangeNode : Node
     {
         [SerializeField] private float range;
-        private Transform target;
-        private Transform origin;
         
         public override NodeState Evaluate(EnemyAIController aiController)
         {
-            target = aiController.playerTransform;
-            origin = aiController.transform;
+            Transform target = aiController.GetPlayerTransform();
+            Transform origin = aiController.transform;
             
             float distance = Vector3.Distance(target.position, origin.position);
             return distance <= range ? NodeState.SUCCESS : NodeState.FAILURE;

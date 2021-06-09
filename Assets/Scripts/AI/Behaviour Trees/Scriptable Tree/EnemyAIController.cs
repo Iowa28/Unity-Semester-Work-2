@@ -1,29 +1,28 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyAIController : MonoBehaviour
 {
     public float maxHealth;
-    public float lowHealthThreshold;
+    [SerializeField] private float lowHealthThreshold;
     public float healthRestoreRate;
-
-    public Transform playerTransform;
-    public Cover[] availableCovers;
-    public Transform[] patrolSpots;
+    private float currentHealth;
     
-    private Material material;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private Cover[] availableCovers;
+    [SerializeField] private Transform[] patrolSpots;
+    [SerializeField] private GameObject deathEffect;
+    
+    //private Material material;
     private Transform bestCoverSpot;
     private NavMeshAgent agent;
     
     [SerializeField] private AI.Behaviour_Trees.Scriptable_Tree.Selector topNode;
 
-    public float currentHealth;
-    
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        material = GetComponentInChildren<MeshRenderer>().material;
+        //material = GetComponentInChildren<MeshRenderer>().material;
     }
 
     private void Start()
@@ -36,7 +35,7 @@ public class EnemyAIController : MonoBehaviour
         topNode.Evaluate(this);
         if (topNode.nodeState == AI.Behaviour_Trees.Scriptable_Tree.NodeState.FAILURE)
         {
-            SetColor(Color.red);
+            //SetColor(Color.red);
             agent.isStopped = true;
         }
 
@@ -51,19 +50,27 @@ public class EnemyAIController : MonoBehaviour
         currentHealth -= damage;
         if (currentHealth < 0f)
         {
-            Destroy(gameObject);
+            Die();
         }
     }
 
-    public NavMeshAgent GetAgent()
+    private void Die()
     {
-        return agent;
+        FindObjectOfType<GameManager>().ReduceEnemyCount();
+
+        GameObject deathEffectObject = (GameObject) Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(deathEffectObject, 5f);
+        
+        Destroy(gameObject);
     }
     
+    #region Getters/Setters
+    /*
     public void SetColor(Color color)
     {
         material.color = color;
     }
+    */
 
     public void SetBestCoverSpot(Transform bestCoverSpot)
     {
@@ -74,7 +81,7 @@ public class EnemyAIController : MonoBehaviour
     {
         return bestCoverSpot;
     }
-
+    
     public float GetCurrentHealth()
     {
         return currentHealth;
@@ -89,4 +96,31 @@ public class EnemyAIController : MonoBehaviour
     {
         return GetComponentInChildren<EnemyWeapon>();
     }
+    
+    public NavMeshAgent GetAgent()
+    {
+        return agent;
+    }
+    
+    public Transform GetPlayerTransform()
+    {
+        return playerTransform;
+    }
+
+    public Transform[] GetPatrolSpots()
+    {
+        return patrolSpots;
+    }
+
+    public Cover[] GetAvailableCovers()
+    {
+        return availableCovers;
+    }
+
+    public float GetLowHealthThreshold()
+    {
+        return lowHealthThreshold;
+    }
+
+    #endregion
 }
