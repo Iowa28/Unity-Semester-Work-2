@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -8,7 +9,7 @@ public class GameManager : MonoBehaviour
     private bool gameHasEnded = false;
 
     [SerializeField] private int enemyCount;
-    [SerializeField] private Text infoText;
+    [SerializeField] private TextMeshProUGUI infoText;
 
     private void Start()
     {

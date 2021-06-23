@@ -60,7 +60,6 @@ public class EnemyAIController : MonoBehaviour
 
         GameObject deathEffectObject = (GameObject) Instantiate(deathEffect, transform.position, Quaternion.identity);
         Destroy(deathEffectObject, 5f);
-        
         Destroy(gameObject);
     }
     

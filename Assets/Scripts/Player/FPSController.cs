@@ -62,7 +62,8 @@ public class FPSController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("Left game");
+            Debug.Log("Quit...");
+            Application.Quit();
         }
     }
 
